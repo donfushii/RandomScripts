@@ -1,0 +1,33 @@
+getgenv().enabled = true
+
+local function addHighlightToCharacter(char)
+    if not char:FindFirstChildOfClass("Highlight") then
+        local h = Instance.new("Highlight")
+        h.FillColor = Color3.fromRGB(0, 255, 0)
+        h.OutlineColor = Color3.new(0, 0, 0)
+        h.OutlineTransparency = 0
+        h.Parent = char
+    end
+end
+
+local function removeAllHighlights()
+    for _, plr in ipairs(game.Players:GetPlayers()) do
+        local char = plr.Character
+        if char then
+            local h = char:FindFirstChildOfClass("Highlight")
+            if h then h:Destroy() end
+        end
+    end
+end
+
+task.spawn(function()
+    while getgenv().enabled do
+        for _, plr in ipairs(game.Players:GetPlayers()) do
+            if plr ~= game.Players.LocalPlayer and plr.Character then
+                addHighlightToCharacter(plr.Character)
+            end
+        end
+        task.wait(1)
+    end
+    removeAllHighlights()
+end)
